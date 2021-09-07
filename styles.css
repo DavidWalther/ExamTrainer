@@ -99,9 +99,13 @@
 
 
       .checker:checked ~ div.answers > div.bg-yellow.bg-blue {
-        /*background-image: linear-gradient(to right, var(--answer-bg-color-blue) , yellow);
+        /*background-image: linear-gradient(to right, var(--answer-bg-color-blue) , yellow);*/
       }
 
+      .answer-line {
+          display: flex;
+          gap: 5px;
+      }
 
 /* Grid */
 
