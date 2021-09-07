@@ -1,0 +1,124 @@
+:root {
+  --answer-bg-color-white: #FDFDFD;
+  --answer-bg-color-blue: #9ba2fd;
+  --answer-bg-color-green: #8cea1f;
+  --answer-bg-color-red: #e91e63;
+}
+
+      body {
+          font-family: sans-serif;
+          background-color: var(--answer-bg-color-white);
+      }
+
+      .sticky_top {
+        position: sticky;
+        top: 0;
+        margin-bottom: 80px:
+      }
+
+      .content {
+          margin: auto;
+          width: 65%;
+          max-width: 1000px;
+          min-width: 400px;
+      }
+
+      .content > * {
+          width: 100%;
+      }
+
+.questions {
+  overflow: scroll;
+}
+
+/* border styles */
+
+      .border {
+          border-style: solid;
+          border-width: 1px;
+          border-left-color: grey;
+      }
+
+      .border_round {
+          border-radius: 15px;
+          padding: 10px;
+      }
+
+.border_shadow {
+          box-shadow: 2px 2px 10px lightgrey;
+          transition: box-shadow 0.2s;
+      }
+
+      .border_shadow:hover {
+          box-shadow: 7px 7px 10px darkgrey;
+          transition: box-shadow 0.2s;
+      }
+
+.head {
+  /*position: sticky;
+  top: 0;
+          background-color: var(--answer-bg-color-white);*/
+}
+
+/* spacing inside container */
+
+      .container {
+          margin-bottom: 50px;
+          background-color: aliceblue;
+      }
+
+      .answers {}
+
+      .question > p {
+          margin-top: 0px;
+      }
+
+.question > div, .answers > div {
+          margin-bottom: 15px;
+      }
+
+/* Color codes */
+
+      .bg-blue {
+        /*background-color: var(--answer-bg-color-blue);*/
+      }
+
+.checker:checked ~ div.answers > div.bg-blue {
+  background-color: var(--answer-bg-color-blue);
+}
+
+
+      .bg-yellow {
+        /*background-color: yellow;*/
+      }
+
+
+      div.bg-yellow.bg-blue {
+      /*	 background-image: linear-gradient(to right, var(--answer-bg-color-blue) , yellow);*/
+      }
+
+
+      .checker:checked ~ div.answers > div.bg-yellow.bg-blue {
+        /*background-image: linear-gradient(to right, var(--answer-bg-color-blue) , yellow);
+      }
+
+
+/* Grid */
+
+      .grid-container {
+        display: grid;
+        grid-auto-columns: 30px auto;
+        grid-gap: 5px;
+      }
+
+.grid-number {
+    grid-row: 1 / span 2;
+}
+
+      .grid-question {
+    grid-column: 2;
+      }
+
+      .grid-answer {
+    grid-column: 2;
+      }

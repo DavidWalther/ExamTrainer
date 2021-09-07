@@ -2,135 +2,8 @@
 <html>
 <head>
 	<title>Integration Architecture Designer SU '20</title>
-	<style type="text/css">
+	<link rel="stylesheet" href="styles.css">
 
-			:root {
-			  --answer-bg-color-white: #FDFDFD;	
-			  --answer-bg-color-blue: #9ba2fd;
-			  --answer-bg-color-green: #8cea1f;
-			  --answer-bg-color-red: #e91e63;
-			}
-
-            body {
-                font-family: sans-serif;
-                background-color: var(--answer-bg-color-white);
-            }
-
-            .sticky_top {
-            	position: sticky;
-            	top: 0;
-            	margin-bottom: 80px: 
-            }
-
-            .content {
-                margin: auto;
-                width: 65%;
-                max-width: 1000px;
-                min-width: 400px;
-            }
-
-            .content > * {
-                width: 100%;
-            }
-			
-			.questions {
-				overflow: scroll;
-			}
-
-			/* border styles */
-            
-            .border {
-                border-style: solid;
-                border-width: 1px;
-                border-left-color: grey;
-            }
-
-            .border_round {
-                border-radius: 15px;
-                padding: 10px;
-            }
-
-			.border_shadow {
-                box-shadow: 2px 2px 10px lightgrey;
-                transition: box-shadow 0.2s;
-            }
-
-            .border_shadow:hover {
-                box-shadow: 7px 7px 10px darkgrey;
-                transition: box-shadow 0.2s;
-            }
-
-			.head {
-				/*position: sticky;
-				top: 0;
-                background-color: var(--answer-bg-color-white);*/
-			}
-
-			/* spacing inside container */
-			
-            .container {
-                margin-bottom: 50px;
-                background-color: aliceblue;
-            }
-
-            .answers {}
-
-            .question > p {
-                margin-top: 0px;
-            }
-
-			.question > div, .answers > div {
-                margin-bottom: 15px;
-            }
-
-			/* Color codes */
-
-            .bg-blue {
-            	/*background-color: var(--answer-bg-color-blue);*/
-            }
-
-			.checker:checked ~ div.answers > div.bg-blue {
-				background-color: var(--answer-bg-color-blue);
-			}
-
-
-            .bg-yellow {
-            	/*background-color: yellow;*/
-            }
-
-
-            div.bg-yellow.bg-blue {
-            /*	 background-image: linear-gradient(to right, var(--answer-bg-color-blue) , yellow);*/
-            }
-
-			
-            .checker:checked ~ div.answers > div.bg-yellow.bg-blue {
-            	/*background-image: linear-gradient(to right, var(--answer-bg-color-blue) , yellow);
-            }
-            
-
-			/* Grid */
-
-            .grid-container {
-            	display: grid;
-            	grid-auto-columns: 30px auto;
-            	grid-gap: 5px;
-            }
-
-			.grid-number {
-  				grid-row: 1 / span 2;				
-			}
-
-            .grid-question {
-  				grid-column: 2;
-            }
-
-            .grid-answer {
-  				grid-column: 2;
-            }
-
-
-	</style>
 	<script>
 		function onChangeSolve(event) {
 			toggleAllSolveCheckboxes(event.target.checked);
@@ -167,7 +40,7 @@
 				resolve(textContent);
 			});
 		}
-		
+
 		async function readFileTextFromInput(input) {
 		    const file = input.files.item(0);
 			const text = await file.text();
@@ -225,10 +98,10 @@
 				const guesses = new Set(question.guesses);
 
 				const tpl = getTemplateCopy('question');
-				
+
 
 				tpl.querySelector('div.number').innerHTML = question.id +' of ' + totalCount;
-				
+
 
 				const questionSection = tpl.querySelector('div.question');
 				question.question.paragraphs.forEach(paragraph =>{
@@ -236,7 +109,7 @@
 					questionparagraph.innerHTML = paragraph;
 					questionSection.appendChild(questionparagraph);
 				});
-				
+
 				const correctAnswersOutput = document.createElement('p');
 				correctAnswersOutput.textContent = 'correct answers: ' + question.numberOfCorrectAnswers;
 				questionSection.appendChild(correctAnswersOutput);
@@ -267,10 +140,10 @@
 				const guesses = new Set(examQuestion.guesses);
 
 				const tpl = getTemplateCopy('question');
-				
+
 
 				tpl.querySelector('div.number').innerHTML = examQuestion.id +' of ' + totalCount;
-				
+
 
 				const questionSection = tpl.querySelector('div.question');
 				examQuestion.question.paragraphs.forEach(paragraph =>{
@@ -278,7 +151,7 @@
 					questionparagraph.innerHTML = paragraph;
 					questionSection.appendChild(questionparagraph);
 				});
-				
+
 				const correctAnswersOutput = document.createElement('p');
 				const numberOfCorrectAnswers = examQuestion.solution.answers.length;
 				correctAnswersOutput.textContent = 'correct answers: ' + numberOfCorrectAnswers;
@@ -315,7 +188,7 @@
 				const guesses = new Set(examQuestion.guesses);
 
 				const tpl = getTemplateCopy('question');
-				
+
 
 				tpl.querySelector('div.number').innerHTML = examQuestion.id +' of ' + totalCount;
 
@@ -326,7 +199,7 @@
 					questionparagraph.innerHTML = paragraph;
 					questionSection.appendChild(questionparagraph);
 				});
-				
+
 
 
 				// add answers
@@ -342,20 +215,20 @@
 					const answerLine = document.createElement('div');
 					if(marks.has(answer.id)) {answerLine.classList.add("bg-blue");}
 					if(guesses.has(answer.id)) {answerLine.classList.add("bg-yellow");}
-					
+
 					answerInput = document.createElement('input');
 					answerInput.setAttribute('type', 'checkbox');
 					answerLine.appendChild(answerInput);
-					
+
 					answerCounter = document.createElement('span');
 					answerCounter.textContent = counter + '. ';
 					answerLine.appendChild(answerCounter);
-					
+
 					answerPhrase = document.createElement('span');
 					answerPhrase.textContent = answer.phrase;
 					answerLine.appendChild(answerPhrase);
 
-					
+
 					answerSection.appendChild(answerLine);
 					counter++;
 				});
@@ -365,11 +238,11 @@
 		}
 
 		function doBuildSummary(jsonContent) {
-			
+
 			const loadV1 = isVersion1(jsonContent);
 			const loadV2 = isVersion2(jsonContent);
 			const loadV3 = isVersion3(jsonContent);
-			
+
 			if(loadV1) {
 				doBuildSummaryV1(jsonContent);
 			}
@@ -380,7 +253,7 @@
 				doBuildSummaryV3(jsonContent);
 			}
 
-			
+
 		}
 
 		function doBuildSummaryV1(jsonContent) {
@@ -388,7 +261,7 @@
 
 			const summary = jsonContent.reduce((aggregate, current) =>{
 				const correctAnswers = checker(current.marks, current.guesses) && checker(current.guesses, current.marks);
-				
+
 				aggregate.correct += correctAnswers ? 1 : 0;
 				aggregate.count += 1;
 				return aggregate;
@@ -398,11 +271,11 @@
 			summary.ratio = summary.correct / summary.count;
 
 			const summaryLine = document.createElement('div');
-			
+
 			const correctDiv = document.createElement('div');
 			correctDiv.innerHTML = 'correct: ' + summary.correct;
 			summaryLine.appendChild(correctDiv);
-			
+
 			const ratioDiv = document.createElement('div');
 			ratioDiv.innerHTML = 'ratio: ' + Math.round(100 * summary.ratio) + ' %';
 			summaryLine.appendChild(ratioDiv);
@@ -420,7 +293,7 @@
 				const guesses = current.guesses;
 
 				const correctAnswers = checker(guesses, answers) && checker(answers, guesses) ;
-				
+
 				if(answers.length > 0) {
 					aggregate.correct += correctAnswers ? 1 : 0;
 					aggregate.count += 1;
@@ -432,11 +305,11 @@
 			summary.ratio = summary.correct / summary.count;
 
 			const summaryLine = document.createElement('div');
-			
+
 			const correctDiv = document.createElement('div');
 			correctDiv.innerHTML = 'correct: ' + summary.correct;
 			summaryLine.appendChild(correctDiv);
-			
+
 			const ratioDiv = document.createElement('div');
 			ratioDiv.innerHTML = 'ratio: ' + Math.round(100 * summary.ratio) + ' %';
 			summaryLine.appendChild(ratioDiv);
@@ -456,7 +329,7 @@
 					}
 					return answerSet;
 				}, new Set());
-				
+
 				// skip question if no answer is marked as correct
 				if(correctAnswers.length === 0) return aggregate;
 
@@ -466,9 +339,9 @@
 				correctAnswers.forEach(answer => {
 					guesses.delete(answer);
 				});
-				
+
 				const questionAnswerdCorrect = guesses.size === 0;
-				
+
 				aggregate.correct += questionAnswerdCorrect ? 1 : 0;
 				aggregate.count += 1;
 
@@ -479,11 +352,11 @@
 			summary.ratio = summary.correct / summary.count;
 
 			const summaryLine = document.createElement('div');
-			
+
 			const correctDiv = document.createElement('div');
 			correctDiv.innerHTML = 'correct: ' + summary.correct;
 			summaryLine.appendChild(correctDiv);
-			
+
 			const ratioDiv = document.createElement('div');
 			ratioDiv.innerHTML = 'ratio: ' + Math.round(100 * summary.ratio) + ' %';
 			summaryLine.appendChild(ratioDiv);
