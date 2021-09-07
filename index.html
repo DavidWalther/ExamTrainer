@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Integration Architecture Designer SU '20</title>
+	<style type="text/css">
+
+			:root {
+			  --answer-bg-color-white: #FDFDFD;	
+			  --answer-bg-color-blue: #9ba2fd;
+			  --answer-bg-color-green: #8cea1f;
+			  --answer-bg-color-red: #e91e63;
+			}
+
+            body {
+                font-family: sans-serif;
+                background-color: var(--answer-bg-color-white);
+            }
+
+            .sticky_top {
+            	position: sticky;
+            	top: 0;
+            	margin-bottom: 80px: 
+            }
+
+            .content {
+                margin: auto;
+                width: 65%;
+                max-width: 1000px;
+                min-width: 400px;
+            }
+
+            .content > * {
+                width: 100%;
+            }
+			
+			.questions {
+				overflow: scroll;
+			}
+
+			/* border styles */
+            
+            .border {
+                border-style: solid;
+                border-width: 1px;
+                border-left-color: grey;
+            }
+
+            .border_round {
+                border-radius: 15px;
+                padding: 10px;
+            }
+
+			.border_shadow {
+                box-shadow: 2px 2px 10px lightgrey;
+                transition: box-shadow 0.2s;
+            }
+
+            .border_shadow:hover {
+                box-shadow: 7px 7px 10px darkgrey;
+                transition: box-shadow 0.2s;
+            }
+
+			.head {
+				/*position: sticky;
+				top: 0;
+                background-color: var(--answer-bg-color-white);*/
+			}
+
+			/* spacing inside container */
+			
+            .container {
+                margin-bottom: 50px;
+                background-color: aliceblue;
+            }
+
+            .answers {}
+
+            .question > p {
+                margin-top: 0px;
+            }
+
+			.question > div, .answers > div {
+                margin-bottom: 15px;
+            }
+
+			/* Color codes */
+
+            .bg-blue {
+            	/*background-color: var(--answer-bg-color-blue);*/
+            }
+
+			.checker:checked ~ div.answers > div.bg-blue {
+				background-color: var(--answer-bg-color-blue);
+			}
+
+
+            .bg-yellow {
+            	/*background-color: yellow;*/
+            }
+
+
+            div.bg-yellow.bg-blue {
+            /*	 background-image: linear-gradient(to right, var(--answer-bg-color-blue) , yellow);*/
+            }
+
+			
+            .checker:checked ~ div.answers > div.bg-yellow.bg-blue {
+            	/*background-image: linear-gradient(to right, var(--answer-bg-color-blue) , yellow);
+            }
+            
+
+			/* Grid */
+
+            .grid-container {
+            	display: grid;
+            	grid-auto-columns: 30px auto;
+            	grid-gap: 5px;
+            }
+
+			.grid-number {
+  				grid-row: 1 / span 2;				
+			}
+
+            .grid-question {
+  				grid-column: 2;
+            }
+
+            .grid-answer {
+  				grid-column: 2;
+            }
+
+
+	</style>
+	<script>
+		function onChangeSolve(event) {
+			toggleAllSolveCheckboxes(event.target.checked);
+
+			readPromise().then(textContent => {
+				const contentObj = JSON.parse(textContent);
+				console.log(contentObj);
+			});
+		}
+
+		function toggleAllSolveCheckboxes(checked) {
+			const solveCheckboxes = document.querySelectorAll('input.checker');
+			solveCheckboxes.forEach(solveCheckbox => {
+				solveCheckbox.checked = checked;
+			});
+		}
+
+		function doChangeFile(event) {
+			clearSummary();
+			clearQuestions();
+
+			readPromise()
+			.then(textContent => {
+				const contentObj = JSON.parse(textContent);
+				doDisplayQuestions(contentObj);
+				doBuildSummary(contentObj);
+			});
+		}
+
+		function readPromise() {
+			return new Promise((resolve, reject) => {
+				const input = document.querySelector('#fileInput');
+				const textContent = readFileTextFromInput(input);
+				resolve(textContent);
+			});
+		}
+		
+		async function readFileTextFromInput(input) {
+		    const file = input.files.item(0);
+			const text = await file.text();
+			return text;
+		}
+
+		function clearSummary() {
+			while(document.querySelector('div.summary').firstChild) {
+				document.querySelector('div.summary').firstChild.remove();
+			}
+		}
+
+		function clearQuestions() {
+			while(document.querySelector('div.questions').firstChild) {
+				document.querySelector('div.questions').firstChild.remove();
+			}
+		}
+
+		function doDisplayQuestions(jsonContent) {
+			const loadV1 = isVersion1(jsonContent);
+			const loadV2 = isVersion2(jsonContent);
+			const loadV3 = isVersion3(jsonContent);
+
+			if(loadV1) {
+				loadQuestionsV1(jsonContent);
+			}
+			if(loadV2) {
+				loadQuestionsV2(jsonContent);
+			}
+			if(loadV3) {
+				loadQuestionsV3(jsonContent);
+			}
+		}
+
+		function isVersion1(jsonContent) {
+			return Array.isArray(jsonContent);
+		}
+
+		function isVersion2(jsonContent) {
+			return jsonContent?.properties && !(jsonContent?.properties?.format);
+		}
+
+		function isVersion3(jsonContent) {
+			return jsonContent?.properties?.format === 'v3';
+		}
+
+		function loadQuestionsV1(jsonContent) {
+			const contentDiv = document.querySelector('div.questions');
+
+			const totalCount = jsonContent.length;
+
+			jsonContent.forEach(question => {
+
+				const marks = new Set(question.marks);
+				const guesses = new Set(question.guesses);
+
+				const tpl = getTemplateCopy('question');
+				
+
+				tpl.querySelector('div.number').innerHTML = question.id +' of ' + totalCount;
+				
+
+				const questionSection = tpl.querySelector('div.question');
+				question.question.paragraphs.forEach(paragraph =>{
+					const questionparagraph = document.createElement('div');
+					questionparagraph.innerHTML = paragraph;
+					questionSection.appendChild(questionparagraph);
+				});
+				
+				const correctAnswersOutput = document.createElement('p');
+				correctAnswersOutput.textContent = 'correct answers: ' + question.numberOfCorrectAnswers;
+				questionSection.appendChild(correctAnswersOutput);
+
+				const answerSection = tpl.querySelector('div.answers');
+				let counter = 1;
+				question.answers.forEach(answer => {
+					const answerLine = document.createElement('div');
+					if(marks.has(answer.id)) {answerLine.classList.add("bg-blue");}
+					if(guesses.has(answer.id)) {answerLine.classList.add("bg-yellow");}
+					answerLine.innerHTML = counter + '. ' + answer.phrase;
+					answerSection.appendChild(answerLine);
+					counter++;
+				});
+
+				contentDiv.appendChild(tpl);
+			});
+		}
+
+		function loadQuestionsV2(jsonContent) {
+			const contentDiv = document.querySelector('div.questions');
+
+			const totalCount = jsonContent.exam.length;
+
+			jsonContent.exam.forEach(examQuestion => {
+
+				const marks = new Set(examQuestion.solution.answers);
+				const guesses = new Set(examQuestion.guesses);
+
+				const tpl = getTemplateCopy('question');
+				
+
+				tpl.querySelector('div.number').innerHTML = examQuestion.id +' of ' + totalCount;
+				
+
+				const questionSection = tpl.querySelector('div.question');
+				examQuestion.question.paragraphs.forEach(paragraph =>{
+					const questionparagraph = document.createElement('div');
+					questionparagraph.innerHTML = paragraph;
+					questionSection.appendChild(questionparagraph);
+				});
+				
+				const correctAnswersOutput = document.createElement('p');
+				const numberOfCorrectAnswers = examQuestion.solution.answers.length;
+				correctAnswersOutput.textContent = 'correct answers: ' + numberOfCorrectAnswers;
+				questionSection.appendChild(correctAnswersOutput);
+
+				const answerSection = tpl.querySelector('div.answers');
+				let counter = 1;
+				examQuestion.answers.forEach(answer => {
+					const answerLine = document.createElement('div');
+					if(marks.has(answer.id)) {answerLine.classList.add("bg-blue");}
+					if(guesses.has(answer.id)) {answerLine.classList.add("bg-yellow");}
+					answerLine.innerHTML = counter + '. ' + answer.phrase;
+					answerSection.appendChild(answerLine);
+					counter++;
+				});
+
+				contentDiv.appendChild(tpl);
+			});
+		}
+
+		function loadQuestionsV3(jsonContent) {
+			const contentDiv = document.querySelector('div.questions');
+
+			const totalCount = jsonContent.exam.length;
+
+			jsonContent.exam.forEach(examQuestion => {
+
+				const marks = examQuestion.answers.reduce((accumulate, current) => {
+					if(current.correct) {
+						accumulate.add(current.id)	;
+					}
+					return accumulate;
+				}, new Set());
+				const guesses = new Set(examQuestion.guesses);
+
+				const tpl = getTemplateCopy('question');
+				
+
+				tpl.querySelector('div.number').innerHTML = examQuestion.id +' of ' + totalCount;
+
+				// add phrase
+				const questionSection = tpl.querySelector('div.question');
+				examQuestion.question.paragraphs.forEach(paragraph =>{
+					const questionparagraph = document.createElement('div');
+					questionparagraph.innerHTML = paragraph;
+					questionSection.appendChild(questionparagraph);
+				});
+				
+
+
+				// add answers
+				const correctAnswersOutput = document.createElement('p');
+				const numberOfCorrectAnswers = marks.size;
+				correctAnswersOutput.textContent = 'correct answers: ' + numberOfCorrectAnswers;
+				questionSection.appendChild(correctAnswersOutput);
+
+				const answerSection = tpl.querySelector('div.answers');
+				let counter = 1;
+
+				examQuestion.answers.forEach(answer => {
+					const answerLine = document.createElement('div');
+					if(marks.has(answer.id)) {answerLine.classList.add("bg-blue");}
+					if(guesses.has(answer.id)) {answerLine.classList.add("bg-yellow");}
+					
+					answerInput = document.createElement('input');
+					answerInput.setAttribute('type', 'checkbox');
+					answerLine.appendChild(answerInput);
+					
+					answerCounter = document.createElement('span');
+					answerCounter.textContent = counter + '. ';
+					answerLine.appendChild(answerCounter);
+					
+					answerPhrase = document.createElement('span');
+					answerPhrase.textContent = answer.phrase;
+					answerLine.appendChild(answerPhrase);
+
+					
+					answerSection.appendChild(answerLine);
+					counter++;
+				});
+
+				contentDiv.appendChild(tpl);
+			});
+		}
+
+		function doBuildSummary(jsonContent) {
+			
+			const loadV1 = isVersion1(jsonContent);
+			const loadV2 = isVersion2(jsonContent);
+			const loadV3 = isVersion3(jsonContent);
+			
+			if(loadV1) {
+				doBuildSummaryV1(jsonContent);
+			}
+			if(loadV2) {
+				doBuildSummaryV2(jsonContent);
+			}
+			if(loadV3) {
+				doBuildSummaryV3(jsonContent);
+			}
+
+			
+		}
+
+		function doBuildSummaryV1(jsonContent) {
+			let checker = (arr, target) => target.every(v => arr.includes(v));
+
+			const summary = jsonContent.reduce((aggregate, current) =>{
+				const correctAnswers = checker(current.marks, current.guesses) && checker(current.guesses, current.marks);
+				
+				aggregate.correct += correctAnswers ? 1 : 0;
+				aggregate.count += 1;
+				return aggregate;
+			} ,{count:0, correct:0});
+
+
+			summary.ratio = summary.correct / summary.count;
+
+			const summaryLine = document.createElement('div');
+			
+			const correctDiv = document.createElement('div');
+			correctDiv.innerHTML = 'correct: ' + summary.correct;
+			summaryLine.appendChild(correctDiv);
+			
+			const ratioDiv = document.createElement('div');
+			ratioDiv.innerHTML = 'ratio: ' + Math.round(100 * summary.ratio) + ' %';
+			summaryLine.appendChild(ratioDiv);
+
+			const summarySection = document.querySelector('div.summary');
+			summarySection.appendChild(summaryLine);
+		}
+
+		function doBuildSummaryV2(jsonContent) {
+			let checker = (arr, target) => target.every(v => arr.includes(v));
+
+
+			const summary = jsonContent.exam.reduce((aggregate, current) => {
+				const answers = current.solution.answers;
+				const guesses = current.guesses;
+
+				const correctAnswers = checker(guesses, answers) && checker(answers, guesses) ;
+				
+				if(answers.length > 0) {
+					aggregate.correct += correctAnswers ? 1 : 0;
+					aggregate.count += 1;
+				}
+				return aggregate;
+			} ,{count:0, correct:0});
+
+
+			summary.ratio = summary.correct / summary.count;
+
+			const summaryLine = document.createElement('div');
+			
+			const correctDiv = document.createElement('div');
+			correctDiv.innerHTML = 'correct: ' + summary.correct;
+			summaryLine.appendChild(correctDiv);
+			
+			const ratioDiv = document.createElement('div');
+			ratioDiv.innerHTML = 'ratio: ' + Math.round(100 * summary.ratio) + ' %';
+			summaryLine.appendChild(ratioDiv);
+
+			const summarySection = document.querySelector('div.summary');
+			summarySection.appendChild(summaryLine);
+		}
+
+		function doBuildSummaryV3(jsonContent) {
+			let checker = (arr, target) => target.every(v => arr.includes(v));
+
+			const summary = jsonContent.exam.reduce((aggregate, current) => {
+
+				const correctAnswers = current.answers.reduce((answerSet, currentAnswer) => {
+					if(currentAnswer.correct) {
+						answerSet.add(currentAnswer.id);
+					}
+					return answerSet;
+				}, new Set());
+				
+				// skip question if no answer is marked as correct
+				if(correctAnswers.length === 0) return aggregate;
+
+
+				const guesses = new Set(current.guesses);
+
+				correctAnswers.forEach(answer => {
+					guesses.delete(answer);
+				});
+				
+				const questionAnswerdCorrect = guesses.size === 0;
+				
+				aggregate.correct += questionAnswerdCorrect ? 1 : 0;
+				aggregate.count += 1;
+
+				return aggregate;
+			} ,{count:0, correct:0});
+
+
+			summary.ratio = summary.correct / summary.count;
+
+			const summaryLine = document.createElement('div');
+			
+			const correctDiv = document.createElement('div');
+			correctDiv.innerHTML = 'correct: ' + summary.correct;
+			summaryLine.appendChild(correctDiv);
+			
+			const ratioDiv = document.createElement('div');
+			ratioDiv.innerHTML = 'ratio: ' + Math.round(100 * summary.ratio) + ' %';
+			summaryLine.appendChild(ratioDiv);
+
+			const summarySection = document.querySelector('div.summary');
+			summarySection.appendChild(summaryLine);
+		}
+
+		function getTemplateCopy(templateId) {
+			const queryString = '#' + templateId;
+			const tempSzenarioBodyContainer = document.querySelector(queryString).content.querySelector('div');
+
+			return document.importNode(tempSzenarioBodyContainer, true);
+		}
+
+	</script>
+</head>
+<body>
+	<div class="content">
+		<div class="head">
+			<div>
+				<label for="fileInput" >File Input</label>
+				<input
+					type="file"
+					id="fileInput"
+					title="Questions File"
+					id="fileInput"
+					onchange="doChangeFile(event)"
+					oncommit="doChangeFile(event)"
+				/>
+			</div>
+			<div>
+				<label for="solver" >Solve</label>
+				<input
+					id="solver"
+					type="checkbox"
+					name="file"
+					id="fileInput"
+					onchange="onChangeSolve(event)"
+				/>
+			</div>
+			<div class="summary"></div>
+		</div>
+
+		<div class="questions"></div>
+	</div>
+
+	<template id="question">
+		<div class="grid-container container border border_round border_shadow">
+			<input type="checkbox" class="checker"/>
+			<div class="number grid-number"></div>
+			<div class="question grid-question"></div>
+			<div class="answers grid-answer"></div>
+		</div>
+	</template>
+</body>
+</html>

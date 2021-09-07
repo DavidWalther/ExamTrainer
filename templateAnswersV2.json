@@ -1,0 +1,84 @@
+{
+	"properties": {
+		"source":"https://www.freecram.com/question/Salesforce.Data-Architecture-And-Management-Designer.v2020-09-03.q75/universal-containers-is-looking-to-use-salesforce-to-manage-their-sales-organization-they-will-be-migrati"
+	},
+	"exam": [
+		{
+			"id": 0,
+			"question":{
+				"paragraphs": [
+					"",
+					""
+				]
+			},
+			"solution": {
+				"count": 0,
+				"answers": [],
+				"explaination":[
+					"",
+					""
+				]
+			},
+			"answers":[
+				{"id": 1, "phrase": "", "correct": false},
+				{"id": 2, "phrase": "", "correct": false},
+				{"id": 3, "phrase": "", "correct": false},
+				{"id": 4, "phrase": "", "correct": false}
+			],
+			"guesses": []
+		},
+		{
+			"id": 0,
+			"question":{
+				"paragraphs": [
+					"",
+					""
+				]
+			},
+			"solution": {
+				"count": 0,
+				"answers": [],
+				"explaination":[
+					"",
+					""
+				]
+			},
+			"answers":[
+				{"id": 1, "phrase": "", "correct": false},
+				{"id": 2, "phrase": "", "correct": false},
+				{"id": 3, "phrase": "", "correct": false},
+				{"id": 4, "phrase": "", "correct": false}
+			],
+			"guesses": []
+		},
+		{
+			"id": 0,
+			"question":{
+				"paragraphs": [
+					"",
+					"<ul><li></li><li></li></ul>",
+					"",
+					""
+				]
+			},
+			"solution": {
+				"count": 0,
+				"answers": [],
+				"explaination":[
+					"",
+					""
+				]
+			},
+			"answers":[
+				{"id": 1, "phrase": "", "correct": false},
+				{"id": 2, "phrase": "", "correct": false},
+				{"id": 3, "phrase": "", "correct": false},
+				{"id": 4, "phrase": "", "correct": false}
+			],
+			"guesses": []
+		}
+	]
+}
+
+
+<ul><li></li><li></li></ul>

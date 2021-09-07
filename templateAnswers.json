@@ -1,0 +1,47 @@
+[
+
+	{
+		"id": 0,
+		"question":{
+			"paragraphs": [
+				"",
+				""
+			]
+		},
+		"numberOfCorrectAnswers": 0,
+		"answers":[
+			{"id": 1, "phrase": ""},
+			{"id": 2, "phrase": ""},
+			{"id": 3, "phrase": ""},
+			{"id": 4, "phrase": ""}
+		],
+		"marks": [],
+		"guesses": [],
+		"explaination":[
+			"",
+			""
+		]
+	},
+	{
+		"id": 0,
+		"question":{
+			"paragraphs": [
+				"",
+				""
+			]
+		},
+		"numberOfCorrectAnswers": 0,
+		"answers":[
+			{"id": 1, "phrase": ""},
+			{"id": 2, "phrase": ""},
+			{"id": 3, "phrase": ""},
+			{"id": 4, "phrase": ""}
+		],
+		"marks": [],
+		"guesses": [],
+		"explaination":[
+			"",
+			""
+		]
+	}
+]
