@@ -185,8 +185,8 @@
 					}
 					return accumulate;
 				}, new Set());
-				const guesses = new Set(examQuestion.guesses);
 
+				const guesses = new Set(examQuestion.guesses);
 				const tpl = getTemplateCopy('question');
 
 
@@ -211,25 +211,27 @@
 				const answerSection = tpl.querySelector('div.answers');
 				let counter = 1;
 
-				examQuestion.answers.forEach(answer => {
-					const answerLine = document.createElement('div');
-					if(marks.has(answer.id)) {answerLine.classList.add("bg-blue");}
-					if(guesses.has(answer.id)) {answerLine.classList.add("bg-yellow");}
 
+				examQuestion.answers.forEach(answer => {
+					const tplAnswerLine = getTemplateCopy('tpl-answer-line');
+					if(marks.has(answer.id)) {tplAnswerLine.classList.add("bg-correct");}
+
+					const inputName = 'q' + examQuestion.id;
+					const inputType = numberOfCorrectAnswers === 1 ? 'radio' : 'checkbox';
 					answerInput = document.createElement('input');
-					answerInput.setAttribute('type', 'checkbox');
-					answerLine.appendChild(answerInput);
+					answerInput.setAttribute('type', inputType);
+					answerInput.setAttribute('name', inputName);
+					tplAnswerLine.querySelector('.input').appendChild(answerInput);
 
 					answerCounter = document.createElement('span');
 					answerCounter.textContent = counter + '. ';
-					answerLine.appendChild(answerCounter);
+					tplAnswerLine.querySelector('.counter').appendChild(answerCounter);
 
 					answerPhrase = document.createElement('span');
 					answerPhrase.textContent = answer.phrase;
-					answerLine.appendChild(answerPhrase);
+					tplAnswerLine.querySelector('.phrase').appendChild(answerPhrase);
 
-
-					answerSection.appendChild(answerLine);
+					answerSection.appendChild(tplAnswerLine);
 					counter++;
 				});
 
