@@ -355,6 +355,12 @@
 
 			let checker = (arr, target) => target.every(v => arr.includes(v));
 
+			const questions = document.querySelectorAll('.questions > div');
+			if(!questions) return;
+
+			const numberOfQuestions = questions.length;
+
+
 			const summary = jsonContent.exam.reduce((aggregate, current) => {
 
 				const correctAnswers = current.answers.reduce((answerSet, currentAnswer) => {
