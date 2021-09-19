@@ -11,6 +11,8 @@
 			readPromise().then(textContent => {
 				const contentObj = JSON.parse(textContent);
 				console.log(contentObj);
+				clearSummary();
+				doBuildSummary(contentObj);
 			});
 		}
 
