@@ -79,12 +79,16 @@
 
 /* Color codes */
 
+      .checker:checked ~ div.answers > div.bg-checked {
+        background-color: yellow;
+      }
+
       .checker:checked ~ div.answers > div.bg-correct {
         background-color: var(--answer-bg-color-blue);
       }
 
-      .checker:checked ~ div.answers > div.bg-correct {
-        /*ackground-image: linear-gradient(to right, var(--answer-bg-color-blue) , yellow);*/
+      .checker:checked ~ div.answers > div.bg-correct.bg-checked {
+        background-image: linear-gradient(to right, var(--answer-bg-color-blue) , yellow);
       }
 
 
