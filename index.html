@@ -355,10 +355,20 @@
 
 			let checker = (arr, target) => target.every(v => arr.includes(v));
 
-			const questions = document.querySelectorAll('.questions > div');
+			const questionsNodeList = document.querySelectorAll('.questions > div');
+			const questions = [...questionsNodeList];
 			if(!questions) return;
 
 			const numberOfQuestions = questions.length;
+
+			const correctlyAnsweredQuestions = questions.reduce((aggregate, current) => {
+				const correctAnswers = current.querySelectorAll('div.bg-correct');
+				const selectedCorrectAnswers = current.querySelectorAll('div.bg-correct.bg-checked');
+
+				let differenceBeweenBothListsSize = correctAnswers.length - selectedCorrectAnswers.length;
+				let countForCorrectQuestions = differenceBeweenBothListsSize === 0 ? 1 : 0;
+				return aggregate + countForCorrectQuestions;
+			} , 0);
 
 
 			const summary = jsonContent.exam.reduce((aggregate, current) => {
