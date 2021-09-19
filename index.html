@@ -350,6 +350,9 @@
 		}
 
 		function doBuildSummaryV3(jsonContent) {
+			if(!jsonContent) return;
+			if(!jsonContent.exam || !jsonContent.exam.length || jsonContent.exam.length === 0) return;
+
 			let checker = (arr, target) => target.every(v => arr.includes(v));
 
 			const summary = jsonContent.exam.reduce((aggregate, current) => {
