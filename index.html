@@ -11,6 +11,8 @@
 			readPromise().then(textContent => {
 				const contentObj = JSON.parse(textContent);
 				console.log(contentObj);
+				clearSummary();
+				doBuildSummary(contentObj);
 			});
 		}
 
@@ -51,7 +53,7 @@
 			.then(textContent => {
 				const contentObj = JSON.parse(textContent);
 				doDisplayQuestions(contentObj);
-				doBuildSummary(contentObj);
+				clearSummary();
 			});
 		}
 
@@ -349,47 +351,53 @@
 			summarySection.appendChild(summaryLine);
 		}
 
+
 		function doBuildSummaryV3(jsonContent) {
+			if(!jsonContent) return;
+			if(!jsonContent.exam || !jsonContent.exam.length || jsonContent.exam.length === 0) return;
+
 			let checker = (arr, target) => target.every(v => arr.includes(v));
 
-			const summary = jsonContent.exam.reduce((aggregate, current) => {
+			const questionsNodeList = document.querySelectorAll('.questions > div');
+			const questions = [...questionsNodeList];
+			if(!questions) return;
 
-				const correctAnswers = current.answers.reduce((answerSet, currentAnswer) => {
-					if(currentAnswer.correct) {
-						answerSet.add(currentAnswer.id);
-					}
-					return answerSet;
-				}, new Set());
+			const numberOfQuestions = questions.length;
 
-				// skip question if no answer is marked as correct
-				if(correctAnswers.length === 0) return aggregate;
+			const correctlyAnsweredQuestions = questions.reduce((aggregate, current) => {
+				
+				const allAnswers = [...current.querySelectorAll('div.answers > div')];
 
-
-				const guesses = new Set(current.guesses);
-
-				correctAnswers.forEach(answer => {
-					guesses.delete(answer);
+				const isCorrect = allAnswers.every(answerLine => {
+					let classes = new Set(answerLine.classList);
+					let isCorrect = classes.has('bg-correct');
+					let isSelected = classes.has('bg-checked');
+					
+					return (isCorrect && isSelected) || (!isSelected && !isCorrect);
 				});
 
-				const questionAnswerdCorrect = guesses.size === 0;
+				let countForCorrectQuestions = isCorrect  ? 1 : 0;
+				return aggregate + countForCorrectQuestions;
+			} , 0);
 
-				aggregate.correct += questionAnswerdCorrect ? 1 : 0;
-				aggregate.count += 1;
+			addSummarySection(numberOfQuestions, correctlyAnsweredQuestions);
+		}
 
-				return aggregate;
-			} ,{count:0, correct:0});
+		function addSummarySection(numberOfQuestions, numberOfCorrectAnswers) {
+			if(numberOfQuestions === undefined || numberOfQuestions === null) return;
+			if(numberOfCorrectAnswers === undefined || numberOfCorrectAnswers === null) return;
 
-
-			summary.ratio = summary.correct / summary.count;
+			let numberOfWrongQuestions = numberOfQuestions - numberOfCorrectAnswers;
+			let ratio = 1 - (numberOfWrongQuestions) / numberOfQuestions;
 
 			const summaryLine = document.createElement('div');
 
 			const correctDiv = document.createElement('div');
-			correctDiv.innerHTML = 'correct: ' + summary.correct;
+			correctDiv.innerHTML = 'correct: ' + numberOfCorrectAnswers;
 			summaryLine.appendChild(correctDiv);
 
 			const ratioDiv = document.createElement('div');
-			ratioDiv.innerHTML = 'ratio: ' + Math.round(100 * summary.ratio) + ' %';
+			ratioDiv.innerHTML = 'ratio: ' + Math.round(100 * ratio) + ' %';
 			summaryLine.appendChild(ratioDiv);
 
 			const summarySection = document.querySelector('div.summary');
