@@ -19,8 +19,7 @@
 				{"id": 2, "phrase": "", "correct": false},
 				{"id": 3, "phrase": "", "correct": false},
 				{"id": 4, "phrase": "", "correct": false}
-			],
-			"guesses": []
+			]
 		},
 		{
 			"id": 0,
@@ -38,8 +37,7 @@
 				{"id": 2, "phrase": "", "correct": false},
 				{"id": 3, "phrase": "", "correct": false},
 				{"id": 4, "phrase": "", "correct": false}
-			],
-			"guesses": []
+			]
 		},
 		{
 			"id": 0,
@@ -59,8 +57,7 @@
 				{"id": 2, "phrase": "", "correct": false},
 				{"id": 3, "phrase": "", "correct": false},
 				{"id": 4, "phrase": "", "correct": false}
-			],
-			"guesses": []
+			]
 		}
 	]
 }
