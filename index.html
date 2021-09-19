@@ -21,6 +21,28 @@
 			});
 		}
 
+
+		function handleAnswerSelectRadio(event) {
+				const checkedClassName = 'bg-checked';
+				const answerList = event.target.parentNode.parentNode.parentNode;
+				const selectedElement = answerList.querySelector('.' + checkedClassName);
+
+				if(selectedElement) {selectedElement.classList.remove(checkedClassName);}
+
+				event.target.parentNode.parentNode.classList.add(checkedClassName);
+		}
+
+		function handleAnswerSelect(event) {
+				const checkedClassName = 'bg-checked';
+
+				const answerDiv = event.target.parentNode.parentNode;
+				if(event.target.checked){
+					answerDiv.classList.add(checkedClassName);
+				} else {
+					answerDiv.classList.remove(checkedClassName);
+				}
+		}
+
 		function doChangeFile(event) {
 			clearSummary();
 			clearQuestions();
@@ -221,6 +243,13 @@
 					answerInput = document.createElement('input');
 					answerInput.setAttribute('type', inputType);
 					answerInput.setAttribute('name', inputName);
+					if(inputType == 'radio') {
+						answerInput.addEventListener('change',  handleAnswerSelectRadio);
+					}
+					if(inputType == 'checkbox') {
+							answerInput.addEventListener('change',  handleAnswerSelect);
+					}
+
 					tplAnswerLine.querySelector('.input').appendChild(answerInput);
 
 					answerCounter = document.createElement('span');
@@ -374,6 +403,7 @@
 			return document.importNode(tempSzenarioBodyContainer, true);
 		}
 
+
 	</script>
 </head>
 <body>
@@ -408,9 +438,9 @@
 
 	<template id="tpl-answer-line">
 		<div class="answer-line" >
-			<div class="counter"></div>
-			<div class="input"></div>
-			<div class="phrase"></div>
+			<div class="counter" ></div>
+			<div class="input" ></div>
+			<div class="phrase" ></div>
 		</div>
 	</template>
 
