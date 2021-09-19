@@ -12,12 +12,7 @@
 				]
 			},
 			"solution": {
-				"count": 0,
-				"answers": [],
-				"explaination":[
-					"",
-					""
-				]
+				"explaination":["",""]
 			},
 			"answers":[
 				{"id": 1, "phrase": "", "correct": false},
@@ -36,12 +31,7 @@
 				]
 			},
 			"solution": {
-				"count": 0,
-				"answers": [],
-				"explaination":[
-					"",
-					""
-				]
+				"explaination":["",""]
 			},
 			"answers":[
 				{"id": 1, "phrase": "", "correct": false},
@@ -62,12 +52,7 @@
 				]
 			},
 			"solution": {
-				"count": 0,
-				"answers": [],
-				"explaination":[
-					"",
-					""
-				]
+				"explaination":["",""]
 			},
 			"answers":[
 				{"id": 1, "phrase": "", "correct": false},
