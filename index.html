@@ -259,7 +259,7 @@
 					tplAnswerLine.querySelector('.counter').appendChild(answerCounter);
 
 					answerPhrase = document.createElement('span');
-					answerPhrase.textContent = answer.phrase;
+					answerPhrase.innerHTML = answer.phrase;
 					tplAnswerLine.querySelector('.phrase').appendChild(answerPhrase);
 
 					answerSection.appendChild(tplAnswerLine);
